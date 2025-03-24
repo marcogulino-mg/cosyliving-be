@@ -7,3 +7,4 @@
 "/${category}" rotta prodotti della categoria
 "/${category}/:id" rotta pagina dettaglio prodotto della categoria
 "/cart" rotta carrello
+"/search" rotta ricerca
