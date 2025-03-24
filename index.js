@@ -9,6 +9,7 @@ const app = express();
 const port = process.env.PORT;
 // IMPORT Middlewares
 const errorsHandler = require("./middleware/errorsHandler");
+const notFound = require("./middleware/notFound");
 // IMPORT Routers
 
 // Middlewares
@@ -27,6 +28,8 @@ app.get("/", (req, res) => {
 // MIDDLEWARES
 // Errors Handler
 app.use(errorsHandler);
+// Not Found Handler
+app.use(notFound);
 
 //Server start (port: 3000)
 app.listen(port, () => {
