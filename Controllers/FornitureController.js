@@ -1,20 +1,21 @@
-const connection = require("./../Data/data")
+const connection = require("./../Data/data");
 
+// INDEX
 function index(req, res) {
-    // Query SQL
-    const sql = "SELECT * FROM products"
+  // QUERY
+  const showProducts = `SELECT * FROM products`;
 
+  // DB Connection
+  connection.query(showProducts, (err, prodResults) => {
+    // Query Failed
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    // Query Empty
+    if (prodResults.length === 0)
+      return res.status(404).json({ error: "Movies List is Empty" });
 
-    connection.query(sql, (err, results) => {
-        console.log(res);
-
-        // if (err) res.status(500).json({ error: "Failed to show products" })
-        // return res.json(results)
-        // console.log(results);
-
-    })
+    // Send RES
+    res.json(prodResults);
+  });
 }
 
-index()
-
-module.exports = (index)
+module.exports = { index };

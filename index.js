@@ -11,7 +11,7 @@ const port = process.env.PORT;
 const errorsHandler = require("./middleware/errorsHandler");
 const notFound = require("./middleware/notFound");
 // IMPORT Routers
-const FornitureRouter = require("./Routers/FornitureRouter")
+const FornitureRouter = require("./Routers/FornitureRouter");
 
 // Middlewares
 // Static File Folder
@@ -21,13 +21,13 @@ app.use(express.json());
 // CORS
 app.use(cors({ origin: process.env.FE_APP }));
 
+// Routers
+app.use("/products", FornitureRouter);
+
 // HomePage
 app.get("/", (req, res) => {
   res.send("<h1>Rotta di Partenza</h1>");
 });
-
-// Test
-app.get
 
 // MIDDLEWARES
 // Errors Handler
