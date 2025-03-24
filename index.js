@@ -17,3 +17,13 @@ app.use(express.static("public"));
 app.use(express.json());
 // CORS
 app.use(cors({ origin: process.env.FE_APP }));
+
+// HomePage
+app.get("/", (req, res) => {
+  res.send("<h1>Rotta di Partenza</h1>");
+});
+
+//Server start (port: 3000)
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
+});
