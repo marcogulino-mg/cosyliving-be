@@ -8,6 +8,7 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT;
 // IMPORT Middlewares
+const errorsHandler = require("./middleware/errorsHandler");
 // IMPORT Routers
 
 // Middlewares
@@ -22,6 +23,10 @@ app.use(cors({ origin: process.env.FE_APP }));
 app.get("/", (req, res) => {
   res.send("<h1>Rotta di Partenza</h1>");
 });
+
+// MIDDLEWARES
+// Errors Handler
+app.use(errorsHandler);
 
 //Server start (port: 3000)
 app.listen(port, () => {
