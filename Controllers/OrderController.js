@@ -22,7 +22,7 @@ function store(req, res) {
     return res.status(400).json({ error: "No Products Selected" });
   }
 
-  console.log(req.body);
+  // console.log(req.body);
   // QUERY
   const addOrder = `INSERT INTO orders (name, surname, email, shipment_address, city, phone_num, billing_address, cf)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -47,9 +47,33 @@ function store(req, res) {
           .status(500)
           .json({ error: "Database query failed", details: err.message });
 
-      res.status(201).json(resultOrder[0]);
-      //Add Products to Order
-      //const orderProducts = products.map(product => [Id, product.id, product.quantity]);
+      // Take Values of each Product ordered
+      const orderedProducts = products.map((product) => [
+        resultOrder.insertId,
+        product.id,
+        product.quantity,
+      ]);
+
+      // QUERY
+      const linkProd_Ord =
+        "INSERT INTO order_product (id_order, id_product, quantity) VALUES ?";
+      // Inject QUERY
+      connection.query(
+        linkProd_Ord,
+        [orderedProducts],
+        (err, resultLinking) => {
+          // Query Failed
+          if (err)
+            return res
+              .status(500)
+              .json({ error: "Database query failed", details: err.message });
+
+          //SEND RES
+          res
+            .status(201)
+            .json({ order: resultOrder[0], product_order: resultLinking });
+        }
+      );
     }
   );
 }
