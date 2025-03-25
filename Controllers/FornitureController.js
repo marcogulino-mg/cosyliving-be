@@ -1,4 +1,5 @@
-const connection = require("./../Data/data");
+// IMPORT DB
+const connection = require("../config/data");
 
 // INDEX
 function index(req, res) {
