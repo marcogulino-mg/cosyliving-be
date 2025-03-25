@@ -56,8 +56,8 @@ function search(req, res) {
     // Query Empty
     if (prodResult.length === 0)
       return res.status(404).json({ error: "Missing Product" });
-    ù    // SEND RES
-    res.json(prodResult[0]);
+    // SEND RES
+    res.json(prodResult);
   });
 }
 
