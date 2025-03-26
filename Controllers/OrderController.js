@@ -14,15 +14,12 @@ function store(req, res) {
     phone_num,
     billing_address,
     cf,
-    total_price,
-    id_coupon,
   } = req.body;
 
   if (!products || products.length === 0) {
     return res.status(400).json({ error: "No Products Selected" });
   }
 
-  // console.log(req.body);
   // QUERY
   const addOrder = `INSERT INTO orders (name, surname, email, shipment_address, city, phone_num, billing_address, cf)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -57,6 +54,7 @@ function store(req, res) {
       // QUERY
       const linkProd_Ord =
         "INSERT INTO order_product (id_order, id_product, quantity) VALUES ?";
+
       // Inject QUERY
       connection.query(
         linkProd_Ord,
@@ -69,9 +67,7 @@ function store(req, res) {
               .json({ error: "Database query failed", details: err.message });
 
           //SEND RES
-          res
-            .status(201)
-            .json({ order: resultOrder[0], product_order: resultLinking });
+          res.status(201).json({ product_order: resultLinking });
         }
       );
     }
