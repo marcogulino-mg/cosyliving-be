@@ -136,4 +136,4 @@ dist
 .pnp.*
 
 .env
-backup-ecommerce_db.sql
+backup_db.sql
