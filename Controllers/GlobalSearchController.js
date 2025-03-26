@@ -17,7 +17,7 @@ function search(req, res) {
 
   // QUERY
   const showProducts = `SELECT * FROM products WHERE ${searchParam}`;
-  console.log(showProducts);
+
   // Inject Query
   connection.query(showProducts, (err, prodResult) => {
     // Query Failed
