@@ -1,26 +1,34 @@
 const connection = require("../config/data");
 
-
 function search(req, res) {
-    // Slug from REQ BODY
-    const { slug } = req.params;
+  // Slug from REQ BODY
+  const { slug } = req.params;
 
-    if (!slug) return res.status(400).json({ error: "Missing Param" });
+  if (!slug) return res.status(400).json({ error: "Missing Param" });
 
-    // QUERY
-    const showProducts = `SELECT * FROM products WHERE slug = ?`;
+  /* Transform string for LIKE (1.Remove init and end space.
+  2.split using space. 3. Add % to init and end string.
+  4.Create a string from array with OR as separator) */
+  const searchParam = slug
+    .trim()
+    .split(" ")
+    .map((param) => `name LIKE '%${param}%'`)
+    .join(" OR ");
 
-    // Inject Query
-    connection.query(showProducts, [slug], (err, prodResult) => {
-        // Query Failed
-        if (err) return res.status(500).json({ error: "Database query failed" });
-        // Query Empty
-        if (prodResult.length === 0)
-            return res.status(404).json({ error: "Missing Product" });
+  // QUERY
+  const showProducts = `SELECT * FROM products WHERE ${searchParam}`;
 
-        // SEND RES
-        res.json(prodResult);
-    });
+  // Inject Query
+  connection.query(showProducts, (err, prodResult) => {
+    // Query Failed
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    // Query Empty
+    if (prodResult.length === 0)
+      return res.status(404).json({ error: "Missing Product" });
+
+    // SEND RES
+    res.json(prodResult);
+  });
 }
 
-module.exports = { search }
+module.exports = { search };
