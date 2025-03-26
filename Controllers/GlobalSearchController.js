@@ -2,14 +2,14 @@ const connection = require("../config/data");
 
 function search(req, res) {
   // Slug from REQ BODY
-  const { slug } = req.params;
+  const { name } = req.params;
 
-  if (!slug) return res.status(400).json({ error: "Missing Param" });
+  if (!name) return res.status(400).json({ error: "Missing Param" });
 
   /* Transform string for LIKE (1.Remove init and end space.
   2.split using space. 3. Add % to init and end string.
   4.Create a string from array with OR as separator) */
-  const searchParam = slug
+  const searchParam = name
     .trim()
     .split(" ")
     .map((param) => `name LIKE '%${param}%'`)
