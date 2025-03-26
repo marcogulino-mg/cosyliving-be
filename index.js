@@ -13,6 +13,7 @@ const notFound = require("./middleware/notFound");
 // IMPORT Routers
 const FornitureRouter = require("./routers/FornitureRouter");
 const OrderRouter = require("./routers/OrderRouter");
+const GlobalSearchRouter = require("./Routers/GlobalSearchRouter")
 
 // Middlewares
 // Static File Folder
@@ -25,6 +26,7 @@ app.use(cors({ origin: process.env.FE_APP }));
 // Routers
 app.use("/products", FornitureRouter);
 app.use("/order", OrderRouter);
+app.use("/search", GlobalSearchRouter)
 
 // HomePage
 app.get("/", (req, res) => {
