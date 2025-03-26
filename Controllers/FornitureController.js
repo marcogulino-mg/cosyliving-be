@@ -19,6 +19,7 @@ function index(req, res) {
   });
 }
 
+// SHOW
 function show(req, res) {
   // Slug from REQ BODY
   const { slug } = req.params;
