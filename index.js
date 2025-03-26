@@ -11,8 +11,8 @@ const port = process.env.PORT;
 const errorsHandler = require("./middleware/errorsHandler");
 const notFound = require("./middleware/notFound");
 // IMPORT Routers
-const FornitureRouter = require("./routers/FornitureRouter");
-const OrderRouter = require("./routers/OrderRouter");
+const FornitureRouter = require("./Routers/FornitureRouter");
+const OrderRouter = require("./Routers/OrderRouter");
 const GlobalSearchRouter = require("./Routers/GlobalSearchRouter")
 
 // Middlewares
