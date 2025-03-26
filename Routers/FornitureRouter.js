@@ -13,7 +13,7 @@ router.get("/new_arrivals", NewArrivalsController.new_arrivals)
 router.get("/:slug", FornitureController.show);
 
 // search
-router.get("/search/:alias", FornitureController.search)
+router.get("/find/:alias", FornitureController.search)
 
 
 
