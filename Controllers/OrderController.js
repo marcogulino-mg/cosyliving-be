@@ -1,6 +1,17 @@
 // IMPORT DB
 const connection = require("../config/data");
 
+
+function Tot(FinalPrice, products) {
+
+  for (i = 0; i < products.length; i++) {
+    FinalPrice = FinalPrice + Number(products[i].price) * products[i].quantity
+  }
+
+  return FinalPrice;
+}
+
+
 // TOTAL PRICE
 function totalPrice(req, res) {
   // Prod id and quantity
@@ -15,7 +26,7 @@ function totalPrice(req, res) {
   const idProd = products.map((product) => product.id);
 
   // QUERY
-  const priceProd = `SELECT price FROM products WHERE id IN (?)`;
+  const priceProd = `SELECT price, quantity FROM products WHERE id IN (?)`;
 
   // Inject QUERY
   connection.query(priceProd, [idProd], (err, resProd) => {
@@ -25,15 +36,16 @@ function totalPrice(req, res) {
         .status(500)
         .json({ error: "Database query failed", details: err.message });
 
-    const totalPrice = resProd.reduce(
-      (sum, item) => sum + Number(item.price),
-      0
-    );
+    // const totalPrice = resProd.reduce(
+    //   (sum, item) => sum + Number(item.price),
+    //   0);
+    var totalPrice = 0;
+    totalPrice = Tot(totalPrice, resProd)
 
-    console.log(totalPrice);
 
     // SEND RES
     res.status(201).json({ Total_price: totalPrice });
+    // res.json(resProd)
   });
 }
 
