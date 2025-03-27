@@ -16,10 +16,10 @@ function search(req, res) {
     .join(" OR ");
 
   // QUERY
-  const showProducts = `SELECT * FROM products WHERE ${searchParam}`;
+  const showProducts = `SELECT * FROM products WHERE (${searchParam} OR category = ?)`;
 
   // Inject Query
-  connection.query(showProducts, (err, prodResult) => {
+  connection.query(showProducts, [name], (err, prodResult) => {
     // Query Failed
     if (err) return res.status(500).json({ error: "Database query failed" });
     // Query Empty
