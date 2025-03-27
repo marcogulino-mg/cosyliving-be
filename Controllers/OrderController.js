@@ -2,10 +2,10 @@
 const connection = require("../config/data");
 
 
-function Tot(FinalPrice, products) {
+function Tot(FinalPrice, products, mult) {
 
   for (i = 0; i < products.length; i++) {
-    FinalPrice = FinalPrice + Number(products[i].price) * products[i].quantity
+    FinalPrice = FinalPrice + Number(products[i].price) * mult[i].quantity
   }
 
   return FinalPrice;
@@ -26,7 +26,7 @@ function totalPrice(req, res) {
   const idProd = products.map((product) => product.id);
 
   // QUERY
-  const priceProd = `SELECT price, quantity FROM products WHERE id IN (?)`;
+  const priceProd = `SELECT price FROM products WHERE id IN (?)`;
 
   // Inject QUERY
   connection.query(priceProd, [idProd], (err, resProd) => {
@@ -40,7 +40,8 @@ function totalPrice(req, res) {
     //   (sum, item) => sum + Number(item.price),
     //   0);
     var totalPrice = 0;
-    totalPrice = Tot(totalPrice, resProd)
+    totalPrice = Tot(totalPrice, resProd, products)
+    totalPrice = totalPrice.toFixed(2)
 
 
     // SEND RES
