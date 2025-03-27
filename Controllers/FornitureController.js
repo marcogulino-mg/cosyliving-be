@@ -14,8 +14,14 @@ function index(req, res) {
     if (prodResults.length === 0)
       return res.status(404).json({ error: "Products List is Empty" });
 
+    const fornitures = prodResults.map((forniture) => {
+      return {
+        ...forniture,
+        img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover
+      }
+    })
     // Send RES
-    res.json(prodResults);
+    res.json(fornitures);
   });
 }
 
@@ -37,8 +43,14 @@ function show(req, res) {
     if (prodResult.length === 0)
       return res.status(404).json({ error: "Missing Product" });
 
+    const fornitures = prodResult.map((forniture) => {
+      return {
+        ...forniture,
+        img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover
+      }
+    })
     // SEND RES
-    res.json(prodResult[0]);
+    res.json(fornitures[0]);
   });
 }
 

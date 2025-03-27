@@ -13,9 +13,17 @@ function offers(req, res) {
         // Query Empty
         if (prodResults.length === 0)
             return res.status(404).json({ error: "Products List is Empty" });
+        console.log(prodResults);
 
+
+        const fornitures = prodResults.map((forniture) => {
+            return {
+                ...forniture,
+                img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover
+            }
+        })
         // Send RES
-        res.json(prodResults);
+        res.json(fornitures);
     });
 }
 

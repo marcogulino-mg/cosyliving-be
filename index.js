@@ -10,16 +10,22 @@ const port = process.env.PORT;
 // IMPORT Middlewares
 const errorsHandler = require("./middleware/errorsHandler");
 const notFound = require("./middleware/notFound");
+const imagePath = require("./middleware/CreatePath")
 // IMPORT Routers
 const FornitureRouter = require("./Routers/FornitureRouter");
 const OrderRouter = require("./Routers/OrderRouter");
 const GlobalSearchRouter = require("./Routers/GlobalSearchRouter")
 
+
 // Middlewares
 // Static File Folder
-app.use(express.static("public"));
+// app.use(express.static("public/imgs"));
+app.use(express.static('public'));
+
 //Handle body-parser for "application/json"
 app.use(express.json());
+
+app.use(imagePath)
 // CORS
 app.use(cors({ origin: process.env.FE_APP }));
 

@@ -25,9 +25,14 @@ function search(req, res) {
     // Query Empty
     if (prodResult.length === 0)
       return res.status(404).json({ error: "Missing Product" });
-
+    const fornitures = prodResult.map((forniture) => {
+      return {
+        ...forniture,
+        img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover
+      }
+    })
     // SEND RES
-    res.json(prodResult);
+    res.json(fornitures);
   });
 }
 
