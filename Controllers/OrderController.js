@@ -3,7 +3,7 @@ const connection = require("../config/data");
 
 // TOTAL PRICE
 function totalPrice(req, res) {
-  // Prod price
+  // Prod id and quantity
   const { products } = req.body;
 
   // Check prod
@@ -11,19 +11,29 @@ function totalPrice(req, res) {
     return res.status(400).json({ error: "No Products Selected" });
   }
 
+  // Get every id from products
+  const idProd = products.map((product) => product.id);
+
   // QUERY
-  const priceProd = `SELECT price FROM products WHERE id = ?`;
+  const priceProd = `SELECT price FROM products WHERE id IN (?)`;
 
   // Inject QUERY
-  connection.query(priceProd, [products.id], (err, resProd) => {
+  connection.query(priceProd, [idProd], (err, resProd) => {
     // Query Failed
     if (err)
       return res
         .status(500)
         .json({ error: "Database query failed", details: err.message });
 
+    const totalPrice = resProd.reduce(
+      (sum, item) => sum + Number(item.price),
+      0
+    );
+
+    console.log(totalPrice);
+
     // SEND RES
-    res.status(201).json(resProd);
+    res.status(201).json({ Total_price: totalPrice });
   });
 }
 
