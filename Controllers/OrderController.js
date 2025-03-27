@@ -1,6 +1,32 @@
 // IMPORT DB
 const connection = require("../config/data");
 
+// TOTAL PRICE
+function totalPrice(req, res) {
+  // Prod price
+  const { products } = req.body;
+
+  // Check prod
+  if (!products || products.length === 0) {
+    return res.status(400).json({ error: "No Products Selected" });
+  }
+
+  // QUERY
+  const priceProd = `SELECT price FROM products WHERE id = ?`;
+
+  // Inject QUERY
+  connection.query(priceProd, [products.id], (err, resProd) => {
+    // Query Failed
+    if (err)
+      return res
+        .status(500)
+        .json({ error: "Database query failed", details: err.message });
+
+    // SEND RES
+    res.status(201).json(resProd);
+  });
+}
+
 // STORE
 function store(req, res) {
   // ORDER Infos
@@ -74,4 +100,4 @@ function store(req, res) {
   );
 }
 
-module.exports = { store };
+module.exports = { store, totalPrice };
