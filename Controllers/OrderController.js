@@ -3,12 +3,19 @@ const connection = require("../config/data");
 
 
 function Tot(FinalPrice, products, mult) {
-
+  var PriceOrder = FinalPrice
   for (i = 0; i < products.length; i++) {
-    FinalPrice = FinalPrice + Number(products[i].price) * mult[i].quantity
+    PriceOrder = PriceOrder + Number(products[i].price) * Number(mult[i].quantity)
   }
+  if (Number(PriceOrder) >= 1000.00) {
+    FinalPrice = PriceOrder
 
-  return FinalPrice;
+  } else {
+    FinalPrice = Number(PriceOrder.toFixed(2)) + 9.99
+  }
+  console.log(PriceOrder.toFixed(2));
+  return Number(FinalPrice.toFixed(2));
+
 }
 
 
@@ -41,7 +48,6 @@ function totalPrice(req, res) {
     //   0);
     var totalPrice = 0;
     totalPrice = Tot(totalPrice, resProd, products)
-    totalPrice = totalPrice.toFixed(2)
 
 
     // SEND RES
