@@ -12,11 +12,11 @@ function search(req, res) {
   const searchParam = name
     .trim()
     .split(" ")
-    .map((param) => `name LIKE '%${param}%'`)
+    .map((param) => `LIKE '%${param}%'`)
     .join(" OR ");
 
   // QUERY
-  const showProducts = `SELECT * FROM products WHERE (${searchParam} OR category = ?)`;
+  const showProducts = `SELECT * FROM products WHERE (name ${searchParam} OR category ${searchParam})`;
 
   // Inject Query
   connection.query(showProducts, [name], (err, prodResult) => {
