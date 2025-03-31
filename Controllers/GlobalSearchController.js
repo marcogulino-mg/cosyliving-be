@@ -2,9 +2,41 @@ const connection = require("../config/data");
 
 function search(req, res) {
   // Slug from REQ BODY
-  const { name } = req.params;
+  const { name, sorter } = req.params;
 
   if (!name) return res.status(400).json({ error: "Missing Param" });
+
+  let sorterQuery = "";
+
+  // Sorter
+  switch (sorter) {
+    case "price_asc":
+      sorterQuery = "ORDER BY `price` asc";
+      break;
+
+    case "price_desc":
+      sorterQuery = "ORDER BY `price` desc";
+      break;
+
+    case "name_asc":
+      sorterQuery = "ORDER BY `name` asc";
+      break;
+
+    case "name_desc":
+      sorterQuery = "ORDER BY `name` desc";
+      break;
+
+    case "date_asc":
+      sorterQuery = "ORDER BY `created_at` asc";
+      break;
+
+    case "date_desc":
+      sorterQuery = "ORDER BY `created_at` desc";
+      break;
+
+    default:
+      break;
+  }
 
   /* Transform string for LIKE (1.Remove init and end space.
   2.split using space. 3. Add % to init and end string.
@@ -16,7 +48,7 @@ function search(req, res) {
     .join(" OR ");
 
   // QUERY
-  const showProducts = `SELECT * FROM products WHERE (${searchParam} OR category = ?)`;
+  const showProducts = `SELECT * FROM products WHERE (${searchParam} OR category = ?) ${sorterQuery}`;
 
   // Inject Query
   connection.query(showProducts, [name], (err, prodResult) => {
@@ -28,9 +60,15 @@ function search(req, res) {
     const fornitures = prodResult.map((forniture) => {
       return {
         ...forniture,
-        img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover
-      }
-    })
+        img_cover:
+          req.imagePath +
+          forniture.category +
+          "/" +
+          forniture.slug +
+          "/" +
+          forniture.img_cover,
+      };
+    });
     // SEND RES
     res.json(fornitures);
   });

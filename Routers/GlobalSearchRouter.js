@@ -3,6 +3,6 @@ const router = express.Router();
 const GlobalSearchController = require("../Controllers/GlobalSearchController");
 
 //
-router.get("/:name", GlobalSearchController.search);
+router.get("/:name/:sorter?", GlobalSearchController.search);
 
 module.exports = router;
