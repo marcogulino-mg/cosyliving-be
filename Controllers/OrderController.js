@@ -4,7 +4,7 @@ const connection = require("../config/data");
 // STORE
 function store(req, res) {
   // ORDER Infos
-  const {
+  let {
     name,
     surname,
     email,
@@ -12,17 +12,43 @@ function store(req, res) {
     products,
     city,
     phone_num,
-    billing_address,
     cf,
+    cap,
+    name_billing,
+    surname_billing,
+    city_billing,
+    billing_address,
+    cap_billing,
   } = req.body;
 
   if (!products || products.length === 0) {
     return res.status(400).json({ error: "No Products Selected" });
   }
 
+  if (
+    ![
+      name_billing,
+      surname_billing,
+      city_billing,
+      billing_address,
+      cap_billing,
+    ].every(Boolean)
+  ) {
+    name_billing = name;
+    surname_billing = surname;
+    city_billing = city;
+    billing_address = shipment_address;
+    cap_billing = cap;
+  }
+
+  if (!req.body) {
+    return res.status(400).json({ error: "Request body is missing" });
+  }
+  console.log("Dati ricevuti:", req.body);
+
   // QUERY
-  const addOrder = `INSERT INTO orders (name, surname, email, shipment_address, city, phone_num, billing_address, cf)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+  const addOrder = `INSERT INTO orders (name, surname, email, shipment_address, city, phone_num, billing_address, cf, cap, name_billing, surname_billing, cap_billing, city_billing)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   // Inject QUERY
   connection.query(
@@ -36,6 +62,11 @@ function store(req, res) {
       phone_num,
       billing_address,
       cf,
+      cap,
+      name_billing,
+      surname_billing,
+      cap_billing,
+      city_billing,
     ],
     (err, resultOrder) => {
       // Query Failed
