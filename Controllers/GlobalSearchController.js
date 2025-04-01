@@ -1,7 +1,7 @@
 const connection = require("../config/data");
 
 function search(req, res) {
-  // Slug from REQ BODY
+  // Slug from REQ Params
   const { name, sorter } = req.params;
 
   if (!name) return res.status(400).json({ error: "Missing Param" });

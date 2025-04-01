@@ -1,5 +1,6 @@
 // IMPORT DB
 const connection = require("../config/data");
+const { param } = require("../Routers/GlobalSearchRouter");
 
 // STORE
 function store(req, res) {
@@ -105,6 +106,39 @@ function store(req, res) {
   );
 }
 
-function show() {}
+function show(req, res) {
+  // Query
+  const recapOrder = `SELECT orders.*, 
+       JSON_ARRAYAGG(
+           JSON_OBJECT(
+               'product_id', products.id,
+               'product_name', products.name,
+               'product_price', products.price,
+               'quantity', order_product.quantity
+           )
+       ) AS products,
+        SUM(products.price * order_product.quantity) AS total_price
+  FROM orders
+  INNER JOIN order_product ON orders.id = order_product.id_order
+  INNER JOIN products ON products.id = order_product.id_product
+  WHERE orders.id = (SELECT MAX(id) FROM orders)
+  GROUP BY orders.id;`;
+
+  // Inject QUERY
+  connection.query(recapOrder, (err, reqRecap) => {
+    // Query Failed
+    if (err)
+      return res
+        .status(500)
+        .json({ error: "Database query failed", details: err.message });
+
+    if (!reqRecap.length) {
+      return res.status(404).json({ error: "Nessun ordine trovato" });
+    }
+
+    //SEND RES
+    res.status(200).json(reqRecap[0]);
+  });
+}
 
 module.exports = { store, show };
