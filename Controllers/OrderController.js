@@ -105,4 +105,6 @@ function store(req, res) {
   );
 }
 
-module.exports = { store };
+function show() {}
+
+module.exports = { store, show };
