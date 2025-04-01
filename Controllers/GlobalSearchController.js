@@ -48,10 +48,10 @@ function search(req, res) {
     .join(" OR ");
 
   // QUERY
-  const showProducts = `SELECT * FROM products WHERE (${searchParam} OR category = ?) ${sorterQuery}`;
+  const showProducts = `SELECT * FROM products WHERE (${searchParam} OR category LIKE ?) ${sorterQuery}`;
 
   // Inject Query
-  connection.query(showProducts, [name], (err, prodResult) => {
+  connection.query(showProducts, [`%${name}%`], (err, prodResult) => {
     // Query Failed
     if (err) return res.status(500).json({ error: "Database query failed" });
     // Query Empty
