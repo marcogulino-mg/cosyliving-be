@@ -17,9 +17,15 @@ function index(req, res) {
     const fornitures = prodResults.map((forniture) => {
       return {
         ...forniture,
-        img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover
-      }
-    })
+        img_cover:
+          req.imagePath +
+          forniture.category +
+          "/" +
+          forniture.slug +
+          "/" +
+          forniture.img_cover,
+      };
+    });
     // Send RES
     res.json(fornitures);
   });
@@ -46,13 +52,18 @@ function show(req, res) {
     const fornitures = prodResult.map((forniture) => {
       return {
         ...forniture,
-        img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover
-      }
-    })
+        img_cover:
+          req.imagePath +
+          forniture.category +
+          "/" +
+          forniture.slug +
+          "/" +
+          forniture.img_cover,
+      };
+    });
     // SEND RES
     res.json(fornitures[0]);
   });
 }
-
 
 module.exports = { index, show };
