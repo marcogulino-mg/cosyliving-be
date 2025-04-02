@@ -15,6 +15,7 @@ const imagePath = require("./middleware/CreatePath");
 const FornitureRouter = require("./Routers/FornitureRouter");
 const OrderRouter = require("./Routers/OrderRouter");
 const GlobalSearchRouter = require("./Routers/GlobalSearchRouter");
+const CalcPriceRouter = require("./Routers/CalcPriceRouter")
 
 // Middlewares
 // Static File Folder
@@ -32,6 +33,7 @@ app.use(cors({ origin: process.env.FE_APP }));
 app.use("/products", FornitureRouter);
 app.use("/order", OrderRouter);
 app.use("/search", GlobalSearchRouter);
+app.use("/calc", CalcPriceRouter);
 
 // HomePage
 app.get("/", (req, res) => {
