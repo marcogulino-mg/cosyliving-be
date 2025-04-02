@@ -2,7 +2,7 @@ const connection = require("../config/data");
 
 function new_arrivals(req, res) {
     // SQL query
-    const sql = "SELECT  name, price, quantity, description,img_cover, category, slug, created_at FROM products WHERE created_at >'2025-02-01 00:00:00'"
+    const sql = "SELECT  name, price, quantity, description,img_cover, category, slug, created_at, discount FROM products WHERE created_at >'2025-02-01 00:00:00'"
     // inject query
     connection.query(sql, (err, results) => {
         // if query fails
