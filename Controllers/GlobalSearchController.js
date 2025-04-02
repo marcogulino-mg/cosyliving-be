@@ -2,7 +2,7 @@ const connection = require("../config/data");
 
 function search(req, res) {
   // Slug from REQ Params
-  const { name, sorter } = req.params;
+  const { type, name, sorter } = req.params;
 
   if (!name) return res.status(400).json({ error: "Missing Param" });
 
@@ -47,13 +47,37 @@ function search(req, res) {
     .map((param) => `name LIKE '%${param}%'`)
     .join(" OR ");
 
-  // QUERY
-  const showProducts = `SELECT * FROM products WHERE (${searchParam} OR category LIKE ?) ${sorterQuery}`;
+  let typeSearch = "";
 
+  switch (type) {
+    case "all_product":
+      typeSearch = `(${searchParam} OR category LIKE ?)`;
+      break;
+
+    case "name":
+      typeSearch = `${searchParam}`;
+      break;
+
+    case "category":
+      typeSearch = `category LIKE ?`;
+      break;
+
+    case "discount":
+      typeSearch = `${searchParam} AND discount > 0`;
+      break;
+  }
+
+  // QUERY
+  const showProducts = `SELECT * FROM products WHERE ${typeSearch} ${sorterQuery}`;
+
+  // console.log(showProducts);
   // Inject Query
   connection.query(showProducts, [`%${name}%`], (err, prodResult) => {
     // Query Failed
-    if (err) return res.status(500).json({ error: "Database query failed" });
+    if (err)
+      return res
+        .status(500)
+        .json({ error: "Database query failed", details: err.message });
     // Query Empty
     if (prodResult.length === 0)
       return res.status(404).json({ error: "Missing Product" });
@@ -68,12 +92,12 @@ function search(req, res) {
             forniture.slug +
             "/" +
             forniture.img_cover,
-          discount_price: ((forniture.price) - (forniture.price / 100) * forniture.discount).toFixed(2)
+          discount_price: (
+            forniture.price -
+            (forniture.price / 100) * forniture.discount
+          ).toFixed(2),
         };
-      }
-
-
-      else {
+      } else {
         return {
           ...forniture,
           img_cover:
