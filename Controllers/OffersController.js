@@ -22,7 +22,7 @@ function offers(req, res) {
                 return {
                     ...forniture,
                     img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover,
-                    discount_price: (forniture.price) - (forniture.price / 100) * forniture.discount
+                    discount_price: ((forniture.price) - (forniture.price / 100) * forniture.discount).toFixed(2)
                 }
             } else {
                 return {

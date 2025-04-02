@@ -68,7 +68,7 @@ function search(req, res) {
             forniture.slug +
             "/" +
             forniture.img_cover,
-          discount_price: (forniture.price) - (forniture.price / 100) * forniture.discount
+          discount_price: ((forniture.price) - (forniture.price / 100) * forniture.discount).toFixed(2)
         };
       }
 

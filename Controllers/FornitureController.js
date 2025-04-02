@@ -25,7 +25,7 @@ function index(req, res) {
             forniture.slug +
             "/" +
             forniture.img_cover,
-          price: (forniture.price) - (forniture.price / 100) * forniture.discount
+          price: ((forniture.price) - (forniture.price / 100) * forniture.discount).toFixed(2)
         };
       }
 
@@ -77,7 +77,7 @@ function show(req, res) {
             forniture.slug +
             "/" +
             forniture.img_cover,
-          discount_price: (forniture.price) - (forniture.price / 100) * forniture.discount
+          discount_price: ((forniture.price) - (forniture.price / 100) * forniture.discount).toFixed(2)
         };
       }
 
