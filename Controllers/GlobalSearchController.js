@@ -63,18 +63,21 @@ function search(req, res) {
       break;
 
     case "discount":
-      typeSearch = `discount > 0`;
+      typeSearch = `${searchParam} AND discount > 0`;
       break;
   }
 
   // QUERY
   const showProducts = `SELECT * FROM products WHERE ${typeSearch} ${sorterQuery}`;
 
-  console.log(showProducts);
+  // console.log(showProducts);
   // Inject Query
   connection.query(showProducts, [`%${name}%`], (err, prodResult) => {
     // Query Failed
-    if (err) return res.status(500).json({ error: "Database query failed" });
+    if (err)
+      return res
+        .status(500)
+        .json({ error: "Database query failed", details: err.message });
     // Query Empty
     if (prodResult.length === 0)
       return res.status(404).json({ error: "Missing Product" });
