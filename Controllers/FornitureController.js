@@ -77,7 +77,7 @@ function show(req, res) {
             forniture.slug +
             "/" +
             forniture.img_cover,
-          price: (forniture.price) - (forniture.price / 100) * forniture.discount
+          discount_price: (forniture.price) - (forniture.price / 100) * forniture.discount
         };
       }
 

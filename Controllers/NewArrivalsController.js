@@ -14,7 +14,7 @@ function new_arrivals(req, res) {
                 return {
                     ...forniture,
                     img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover,
-                    price: (forniture.price) - (forniture.price / 100) * forniture.discount
+                    discount_price: (forniture.price) - (forniture.price / 100) * forniture.discount
                 }
             } else {
                 return {
