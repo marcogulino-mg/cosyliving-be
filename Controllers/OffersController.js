@@ -17,9 +17,18 @@ function offers(req, res) {
 
 
         const fornitures = prodResults.map((forniture) => {
-            return {
-                ...forniture,
-                img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover
+            // calcolo del prezzo se scontato 
+            if (forniture.discount != 0) {
+                return {
+                    ...forniture,
+                    img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover,
+                    price: (forniture.price) - (forniture.price / 100) * forniture.discount
+                }
+            } else {
+                return {
+                    ...forniture,
+                    img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover,
+                }
             }
         })
         // Send RES
