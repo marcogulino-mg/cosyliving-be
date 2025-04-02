@@ -58,16 +58,33 @@ function search(req, res) {
     if (prodResult.length === 0)
       return res.status(404).json({ error: "Missing Product" });
     const fornitures = prodResult.map((forniture) => {
-      return {
-        ...forniture,
-        img_cover:
-          req.imagePath +
-          forniture.category +
-          "/" +
-          forniture.slug +
-          "/" +
-          forniture.img_cover,
-      };
+      if (forniture.discount != 0) {
+        return {
+          ...forniture,
+          img_cover:
+            req.imagePath +
+            forniture.category +
+            "/" +
+            forniture.slug +
+            "/" +
+            forniture.img_cover,
+          price: (forniture.price) - (forniture.price / 100) * forniture.discount
+        };
+      }
+
+
+      else {
+        return {
+          ...forniture,
+          img_cover:
+            req.imagePath +
+            forniture.category +
+            "/" +
+            forniture.slug +
+            "/" +
+            forniture.img_cover,
+        };
+      }
     });
     // SEND RES
     res.json(fornitures);

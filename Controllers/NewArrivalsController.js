@@ -10,9 +10,17 @@ function new_arrivals(req, res) {
         //   if query doesn't get results
         if (results.length === 0) res.status(404).json({ error: "Product not found" })
         const fornitures = results.map((forniture) => {
-            return {
-                ...forniture,
-                img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover
+            if (forniture.discount != 0) {
+                return {
+                    ...forniture,
+                    img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover,
+                    price: (forniture.price) - (forniture.price / 100) * forniture.discount
+                }
+            } else {
+                return {
+                    ...forniture,
+                    img_cover: req.imagePath + forniture.category + '/' + forniture.slug + '/' + forniture.img_cover,
+                }
             }
         })
         //   send res
