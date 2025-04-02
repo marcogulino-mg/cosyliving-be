@@ -9,7 +9,7 @@ function calcPrice(req, res) {
 
     const productIds = products.map(product => product.id);
 
-    const sql = `SELECT id, price, discount FROM products WHERE id IN (?)`;
+    const sql = `SELECT id, price, discount, name FROM products WHERE id IN (?)`;
 
     connection.query(sql, [productIds], (err, results) => {
         if (err) {
@@ -30,10 +30,12 @@ function calcPrice(req, res) {
             const priceAfterDiscount = dbProduct.price - ((dbProduct.price) * (dbProduct.discount / 100));
             return {
                 id: product.id,
+                name: dbProduct.name,
                 quantity: product.quantity,
                 unitPrice: dbProduct.price,
                 discount: dbProduct.discount,
                 totalPrice: (priceAfterDiscount * product.quantity).toFixed(2)
+
             };
         });
 
@@ -41,4 +43,20 @@ function calcPrice(req, res) {
     });
 }
 
-module.exports = { calcPrice };
+function lastCalc(req, res) {
+    let products = req.body;
+    let tot = {
+        tot_price: 0
+    }
+    for (let i = 0; i < products.length; i++) {
+        tot.tot_price += Number(products[i].totalPrice)
+
+
+    }
+    if (tot.tot_price < 1000) {
+        tot.tot_price += 9.99
+    }
+    res.json(tot)
+}
+
+module.exports = { calcPrice, lastCalc };

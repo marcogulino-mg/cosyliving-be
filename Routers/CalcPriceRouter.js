@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const CalcPriceController = require("./../Controllers/CalcPriceController")
+const CalcPriceController = require("./../Controllers/CalcPriceController");
+const { route } = require("./GlobalSearchRouter");
 
 
 
-router.get("/", CalcPriceController.calcPrice);
+router.post("/", CalcPriceController.calcPrice);
+
+router.post("/last", CalcPriceController.lastCalc)
 
 
 
