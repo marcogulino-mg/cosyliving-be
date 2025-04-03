@@ -1,6 +1,7 @@
 // IMPORT DB
 const connection = require("../config/data");
 const { param } = require("../Routers/GlobalSearchRouter");
+const mysql = require("mysql2");
 
 // STORE
 function store(req, res) {
@@ -84,8 +85,7 @@ function store(req, res) {
       ]);
 
       // QUERY
-      const linkProd_Ord =
-        "INSERT INTO order_product (id_order, id_product, quantity) VALUES ?";
+      const linkProd_Ord = `INSERT INTO order_product (id_order, id_product, quantity) VALUES ?`;
 
       // Inject QUERY
       connection.query(
@@ -97,6 +97,27 @@ function store(req, res) {
             return res
               .status(500)
               .json({ error: "Database query failed", details: err.message });
+
+          const reduceQt = `UPDATE products JOIN order_product ON products.id = order_product.id_product 
+          SET products.quantity = products.quantity - order_product.quantity 
+          WHERE order_product.id_order = ?;`;
+
+          connection.query(
+            reduceQt,
+            [resultOrder.insertId],
+            (err, resReduceQt) => {
+              console.log(
+                "Query formattata:",
+                mysql.format(reduceQt, [orderedProducts.insertId])
+              );
+              // Query Failed
+              if (err)
+                return res.status(500).json({
+                  error: "Database query failed",
+                  details: err.message,
+                });
+            }
+          );
 
           //SEND RES
           res.status(201).json({ product_order: resultLinking });
