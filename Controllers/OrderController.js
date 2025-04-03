@@ -48,9 +48,37 @@ function store(req, res) {
   }
   console.log("Dati ricevuti:", req.body);
 
+  // Calcolare il total_price sommando il prezzo di ogni prodotto con eventuale sconto
+  let total_price = 0;
+  products.forEach((product) => {
+    // Assicurarsi che il discount sia definito
+    const discount = product.discount || 0; // Se discount è undefined, imposta a 0
+    console.log(
+      `Prodotto: ${product.id}, prezzo: ${product.price}, sconto: ${discount}`
+    );
+
+    // Calcolare il prezzo scontato per ogni prodotto
+    if (isNaN(product.price) || isNaN(discount)) {
+      console.error(
+        `Valori non validi per il prodotto ${product.id}: prezzo ${product.price}, sconto ${discount}`
+      );
+      return;
+    }
+
+    const priceWithDiscount = product.price - product.price * (discount / 100);
+    total_price += priceWithDiscount * product.quantity; // sommare il totale del prodotto scontato moltiplicato per la quantità
+  });
+
+  console.log("Total price calcolato:", total_price);
+
+  // Aggiungere 9,99 se il total_price è inferiore a 1000
+  if (total_price < 1000) {
+    total_price += 9.99;
+  }
+
   // QUERY
-  const addOrder = `INSERT INTO orders (name, surname, email, shipment_address, city, phone_num, billing_address, cf, cap, name_billing, surname_billing, cap_billing, city_billing)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const addOrder = `INSERT INTO orders (name, surname, email, shipment_address, city, phone_num, billing_address, cf, cap, name_billing, surname_billing, cap_billing, city_billing, total_price)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   // Inject QUERY
   connection.query(
@@ -69,6 +97,7 @@ function store(req, res) {
       surname_billing,
       cap_billing,
       city_billing,
+      total_price,
     ],
     (err, resultOrder) => {
       // Query Failed
