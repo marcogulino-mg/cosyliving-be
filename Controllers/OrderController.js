@@ -46,7 +46,7 @@ function store(req, res) {
   if (!req.body) {
     return res.status(400).json({ error: "Request body is missing" });
   }
-  console.log("Dati ricevuti:", req.body);
+  // console.log("Dati ricevuti:", req.body);
 
   // Calcolare il total_price sommando il prezzo di ogni prodotto con eventuale sconto
   let total_price = 0;
@@ -54,19 +54,29 @@ function store(req, res) {
     // Assicurarsi che il discount sia definito
     const discount = product.discount || 0; // Se discount è undefined, imposta a 0
     console.log(
-      `Prodotto: ${product.id}, prezzo: ${product.price}, sconto: ${discount}`
+      `Prodotto: ${product.id}, prezzo: ${product.price}, `
+
     );
 
     // Calcolare il prezzo scontato per ogni prodotto
     if (isNaN(product.price) || isNaN(discount)) {
       console.error(
-        `Valori non validi per il prodotto ${product.id}: prezzo ${product.price}, sconto ${discount}`
+        `Valori non validi per il prodotto ${product.id}: prezzo ${product.price}, sconto ${product.discount_price}`
+
       );
       return;
     }
+    console.log(product);
 
-    const priceWithDiscount = product.price - product.price * (discount / 100);
-    total_price += priceWithDiscount * product.quantity; // sommare il totale del prodotto scontato moltiplicato per la quantità
+
+    if (product.discount_price) {
+      total_price += product.discount_price * product.quantity;
+      console.log("Ciao");
+
+    } else {
+      total_price += product.price * product.quantity;
+    }
+
   });
 
   console.log("Total price calcolato:", total_price);
@@ -167,7 +177,7 @@ function show(req, res) {
                'quantity', order_product.quantity
            )
        ) AS products,
-        SUM(products.price * order_product.quantity) AS total_price
+        SUM(((products.price) - products.price * (products.discount/100)) * order_product.quantity) AS total_price
   FROM orders
   INNER JOIN order_product ON orders.id = order_product.id_order
   INNER JOIN products ON products.id = order_product.id_product
